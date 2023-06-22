@@ -1,4 +1,4 @@
-#include "main.h"
+#include "monty.h"
 /**
  * mod_op - Computes the rest of the division of the second top element by the top element.
  * @stack: Pointer to the stack.
@@ -63,30 +63,24 @@ void pstr_op(stack_t **stack, unsigned int line_number)
     printf("\n");
 }
 
-/**
- * rotl_op - Rotates the stack to the top.
- * @stack: Pointer to the stack.
- * @line_number: Line number in the file.
- */
 void rotl_op(stack_t **stack, unsigned int line_number)
 {
-    stack_t *temp, *last;
+    stack_t *last;
+   (void)line_number; 
 
-    (void)line_number;
+    if (*stack == NULL || (*stack)->next == NULL)
+        return;
 
-    if (*stack != NULL && (*stack)->next != NULL)
-    {
-        last = *stack;
-        *stack = (*stack)->next;
+    last = *stack;
 
-        while (last->next != NULL)
-            last = last->next;
+    while (last->next != NULL)
+        last = last->next;
 
-        last->next = temp;
-        temp->prev = last;
-        temp->next = NULL;
-        *stack = temp;
-    }
+    last->next = *stack;
+    *stack = (*stack)->next;
+    (*stack)->prev = NULL;
+    last->next->next = NULL;
+    last->next->prev = last;
 }
 
 /**

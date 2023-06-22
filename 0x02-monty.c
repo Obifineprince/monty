@@ -1,4 +1,4 @@
-#include "main.h"
+#include "monty.h"
 
 /**
  * add - Adds the top two elements of the stack.
@@ -14,7 +14,7 @@ void add(stack_t **stack, unsigned int line_number)
     }
 
     (*stack)->next->n += (*stack)->n;
-    pop(stack, line_number);
+    pop_op(stack, line_number);
 }
 
 /**

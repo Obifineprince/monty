@@ -1,4 +1,4 @@
-#include "main.h"
+#include "monty.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,24 +9,36 @@
  * @line_number: Line number in the file.
  * @value: Value to push to the stack.
  */
-void push(stack_t **stack, unsigned int line_number, int value)
+void push(stack_t **stack, unsigned int line_number)
 {
-    stack_t *new_node = malloc(sizeof(stack_t));
+    char *value = value;
 
-    if (new_node == NULL)
+	char *endptr;
+
+	int element;
+
+    if (value == NULL)
     {
-        fprintf(stderr, "Error: malloc failed\n");
+        error_int(line_number);
         exit(EXIT_FAILURE);
     }
 
-    new_node->n = value;
-    new_node->prev = NULL;
-    new_node->next = *stack;
 
-    if (*stack != NULL)
-        (*stack)->prev = new_node;
+    element = strtol(value, &endptr, 10);
+    if (*endptr != '\0')
+    {
+        error_int(line_number);
+        exit(EXIT_FAILURE);
+    }
 
-    *stack = new_node;
+    if (mode == 1)
+    {
+        add_dnodeint_end(stack, element);
+    }
+    else
+    {
+        add_dnodeint(stack, element);
+    }
 }
 
 /**
@@ -64,13 +76,14 @@ void pint(stack_t **stack, unsigned int line_number)
 }
 
 /**
- * pop - Removes the top element of the stack.
+ * pop_op - Removes the top element of the stack.
  * @stack: Pointer to the stack.
  * @line_number: Line number in the file.
  */
-void pop(stack_t **stack, unsigned int line_number)
+void pop_op(stack_t **stack, unsigned int line_number)
 {
     stack_t *temp;
+
 
     if (*stack == NULL)
     {
@@ -86,7 +99,6 @@ void pop(stack_t **stack, unsigned int line_number)
 
     free(temp);
 }
-
 /**
  * swap - Swaps the top two elements of the stack.
  * @stack: Pointer to the stack.
@@ -94,14 +106,13 @@ void pop(stack_t **stack, unsigned int line_number)
  */
 void swap(stack_t **stack, unsigned int line_number)
 {
-    int temp;
-
+	int temp = (*stack) ->n;
     if (*stack == NULL || (*stack)->next == NULL)
     {
         fprintf(stderr, "L%u: can't swap, stack too short\n", line_number);
         exit(EXIT_FAILURE);
     }
 
-    temp = (*stack)->n;
     (*stack)->n = (*stack)->next->n;
+    (*stack)->next->n = temp;
 }
