@@ -1,110 +1,124 @@
 #include "monty.h"
 /**
- * mod_op - Computes the rest of the division of the second top element by the top element.
+ * mod - Calculates the remainder of the division of the second top element by the top element.
  * @stack: Pointer to the stack.
- * @line_number: Line number in the file.
+ * @line_number: Line number.
+ *
+ * Description: This function calculates the remainder of the division of the second top element by
+ * the top element and replaces them with their result.
  */
-void mod_op(stack_t **stack, unsigned int line_number)
+void mod(stack_t **stack, unsigned int line_number)
 {
-    if (*stack == NULL || (*stack)->next == NULL)
+    int remainder;
+    stack_t *tmp = *stack;
+    int length = dlistint_len(*stack);
+
+    if (length < 2)
     {
-        fprintf(stderr, "L%u: can't mod, stack too short\n", line_number);
+        error_modu(line_number);
         exit(EXIT_FAILURE);
     }
 
-    if ((*stack)->n == 0)
+    if (tmp->n == 0)
     {
-        fprintf(stderr, "L%u: division by zero\n", line_number);
+        error_div2(line_number);
         exit(EXIT_FAILURE);
     }
 
-    (*stack)->next->n %= (*stack)->n;
-    pop_op(stack, line_number);
+    remainder = (tmp->next->n) % (tmp->n);
+    tmp->next->n = remainder;
+    tmp->next->prev = NULL;
+    *stack = tmp->next;
+    free(tmp);
 }
+
 /**
- * pchar_op - Prints the char at the top of the stack.
+ * pchar - Prints the character at the top of the stack.
  * @stack: Pointer to the stack.
- * @line_number: Line number in the file.
+ * @line_number: Line number.
+ *
+ * Description: This function prints the character at the top of the stack.
+ * The top element of the stack should represent an ASCII value.
  */
-void pchar_op(stack_t **stack, unsigned int line_number)
+void pchar(stack_t **stack, unsigned int line_number)
 {
-    if (*stack == NULL)
+    if (!(*stack))
     {
-        fprintf(stderr, "L%u: can't pchar, stack empty\n", line_number);
+        error_pchar2(line_number);
         exit(EXIT_FAILURE);
     }
 
     if ((*stack)->n < 0 || (*stack)->n > 127)
     {
-        fprintf(stderr, "L%u: can't pchar, value out of range\n", line_number);
+        errchar(line_number);
         exit(EXIT_FAILURE);
     }
 
-    printf("%c\n", (*stack)->n);
+    putchar((*stack)->n);
+    putchar(10);
 }
 
 /**
- * pstr_op - Prints the string starting at the top of the stack.
+ * pstr - Prints the string starting from the top of the stack.
  * @stack: Pointer to the stack.
- * @line_number: Line number in the file.
+ * @line_number: Line number.
+ *
+ * Description: This function prints the string starting from the top of the stack.
+ * The elements of the stack should represent ASCII values of characters, and the
+ * string is printed until a non-printable character or the end of the stack is reached.
  */
-void pstr_op(stack_t **stack, unsigned int line_number)
+void pstr(stack_t **stack, unsigned int line_number)
 {
-    stack_t *current = *stack;
-
+    stack_t *traverse = *stack;
     (void)line_number;
 
-    while (current != NULL && current->n != 0 && (current->n >= 0 && current->n <= 127))
+    while (traverse && traverse->n > 0 && traverse->n < 127)
     {
-        printf("%c", current->n);
-        current = current->next;
+        putchar(traverse->n);
+        traverse = traverse->next;
     }
 
-    printf("\n");
+    putchar(10);
 }
 
-void rotl_op(stack_t **stack, unsigned int line_number)
+/**
+ * rotl - Rotates the stack to the top.
+ * @stack: Pointer to the stack.
+ * @line_number: Line number.
+ *
+ * Description: This function rotates the stack, moving the second element to the top.
+ */
+void rotl(stack_t **stack, unsigned int line_number)
 {
-    stack_t *last;
-   (void)line_number; 
+    stack_t *tmp;
+    (void)line_number;
 
     if (*stack == NULL || (*stack)->next == NULL)
         return;
 
-    last = *stack;
-
-    while (last->next != NULL)
-        last = last->next;
-
-    last->next = *stack;
-    *stack = (*stack)->next;
+    tmp = *stack;
+    *stack = tmp->next;
     (*stack)->prev = NULL;
-    last->next->next = NULL;
-    last->next->prev = last;
+    add_dnodeint_end(stack, tmp->n);
+    free(tmp);
 }
 
 /**
- * rotr_op - Rotates the stack to the bottom.
+ * rotr - Rotates the stack to the last element.
  * @stack: Pointer to the stack.
- * @line_number: Line number in the file.
+ * @line_number: Line number.
+ *
+ * Description: This function rotates the stack, moving the last element to the top.
  */
-void rotr_op(stack_t **stack, unsigned int line_number)
+void rotr(stack_t **stack, unsigned int line_number)
 {
-    stack_t *last;
-
+    stack_t *tmp;
     (void)line_number;
 
-    if (*stack != NULL && (*stack)->next != NULL)
-    {
-        last = *stack;
+    if (*stack == NULL || (*stack)->next == NULL)
+        return;
 
-        while (last->next != NULL)
-            last = last->next;
-
-        last->next = *stack;
-        (*stack)->prev = last;
-        *stack = (*stack)->prev;
-        (*stack)->prev = NULL;
-    }
+    tmp = get_dnodeint_at_index(*stack, dlistint_len(*stack) - 1);
+    add_dnodeint(stack, tmp->n);
+    delete_dnodeint_at_index(stack, dlistint_len(*stack) - 1);
 }
-
