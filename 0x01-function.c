@@ -3,6 +3,7 @@
 /**
  * free_dlistint - releases a doubly linked list
  * @head: pointer to the head of the list
+ * Return: void
  */
 void free_dlistint(stack_t *head)
 {
@@ -22,7 +23,7 @@ void free_dlistint(stack_t *head)
 /**
  * add_dnodeint - adds a new node at the beginning of a list
  * @head: double pointer to the head of the list
- * @n: data for the new node
+ * @n: data n for the new node
  * Return: address of the new element, or NULL if it fails
  */
 stack_t *add_dnodeint(stack_t **head, const int n)

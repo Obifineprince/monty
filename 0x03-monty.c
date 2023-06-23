@@ -1,10 +1,11 @@
 #include "monty.h"
 /**
- * mod - Calculates the remainder of the division of the second top element by the top element.
- * @stack: Pointer to the stack.
+ * mod - Calculates the remainder of the division of the second top 
+ * element by the top element.
+ * @stack: Pointer to the stack elements
  * @line_number: Line number.
  *
- * Description: This function calculates the remainder of the division of the second top element by
+ * Description: This func calculates the remainder of the division of the second top element by
  * the top element and replaces them with their result.
  */
 void mod(stack_t **stack, unsigned int line_number)

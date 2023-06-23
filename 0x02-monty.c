@@ -1,10 +1,10 @@
 #include "monty.h"
 /**
  * add - Adds the top two elements of the stack.
- * @stack: Pointer to the stack.
+ * @stack: Pointer to the stack elements
  * @line_number: Line number.
  *
- * Description: This function adds the top two elements of the stack and
+ * Description: This func adds the top two elements of the stack and
  * replaces them with their sum.
  */
 void add(stack_t **stack, unsigned int line_number)
@@ -26,7 +26,7 @@ void add(stack_t **stack, unsigned int line_number)
 }
 
 /**
- * nop - Does nothing.
+ * nop - Does nothing on the elements
  * @stack: Pointer to the stack.
  * @line_number: Line number.
  *
